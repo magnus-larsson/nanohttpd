@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:riv:crm:scheduling:MakeBookingResponder:1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:MakeBookingResponse>
+         <urn:bookingId>1007</urn:bookingId>
+         <urn:resultCode>OK</urn:resultCode>
+         <urn:resultText>BOOKING CREATED</urn:resultText>
+      </urn:MakeBookingResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

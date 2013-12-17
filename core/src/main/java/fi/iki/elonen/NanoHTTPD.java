@@ -37,6 +37,8 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import se.callista.nanohttpd.SlowServerSocket;
+
 /**
  * A simple, tiny, nicely embeddable HTTP server in Java
  * <p/>
@@ -114,6 +116,10 @@ public abstract class NanoHTTPD {
      */
     private TempFileManagerFactory tempFileManagerFactory;
 
+    private int connectionSleepTime;
+    private int requestSleepTime;
+    private String responseFile;
+    
     /**
      * Constructs an HTTP server on given port.
      */
@@ -131,7 +137,12 @@ public abstract class NanoHTTPD {
         setAsyncRunner(new DefaultAsyncRunner());
     }
 
-    private static final void safeClose(ServerSocket serverSocket) {
+    public NanoHTTPD(int port, int connectionSleepTime) {
+        this(null, port);
+        this.connectionSleepTime = connectionSleepTime;
+	}
+
+	private static final void safeClose(ServerSocket serverSocket) {
         if (serverSocket != null) {
             try {
                 serverSocket.close();
@@ -164,7 +175,7 @@ public abstract class NanoHTTPD {
      * @throws IOException if the socket is in use.
      */
     public void start() throws IOException {
-        myServerSocket = new ServerSocket();
+        myServerSocket = new SlowServerSocket(connectionSleepTime);
         myServerSocket.bind((hostname != null) ? new InetSocketAddress(hostname, myPort) : new InetSocketAddress(myPort));
 
         myThread = new Thread(new Runnable() {
